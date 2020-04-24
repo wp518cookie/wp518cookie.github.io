@@ -361,20 +361,15 @@
 
       
         
-          
-            <p>4/24<br>一、rocketMQ最佳实践文档总结<br>1、生产者<br>1.1、一个应用尽可能用一个topic，子类型用tags来标识。消费时可以用tag来过滤。<br>reason：1）topic越少，consumeQueue文件越少，避免了打开多个文件，避免了更多的随机读写，更有可能顺序写。<br>2）给一个consumergroup消费多个topic的机会   </p>
-<p>1.2、sendResult状态<br>1）SEND_OK:<br>发送成功，并不意味着可靠。需要设置SYNC_MASTER/SYNC_FLUSH<br>2）FLUSH_DISK_TIMEOUT:<br>刷盘超时，消息已经保存到内存中。除非服务器宕机，消息才会丢。当设置了FlushDiskType=SYNC_FLUSH（默认为ASYNC_FLUSH)，当broker服务器未在同步刷盘时间内（默认为5s）完成刷盘，则返回该状态——刷盘超时<br>3）FLUSH_SLAVE_TIMEOUT:<br>同步到slave超时，消息已经进入服务器队列，宕机才会丢<br>4）SLAVE_NOT_AVAILABLE:<br>slave不可用，如果slave落后master实在太多，那个slave也会认为是暂时不可用的slave，<br>直到它同步到接近的范围为止，这个不可用的阈值由broker配置haSlaveFallbehindMax（默认是1024 <em> 1024 </em> 256）决定   </p>
-<p>1.3、消息发送失败处理：<br>1）重试多次<br>2）轮转到下一个broker<br>3）如果本身向broker发送产生超时，不会重试<br>重试后可以由业务自己选择如何处理，如对可靠性要求较高，可以落盘后，定时重试。    </p>
-<p>2、消费者<br>2.1、幂等控制<br>rocketMq无法避免重复，因为有时候生产者ack失败会触发再次发送，需要通过业务字段去处理。msgId是每个消息的唯一标识，但是可能两个不同msgId的内容是相同的，如果不能依靠msgId来实现幂等。</p>
-<p>2.2、消息堆积，消费速度慢<br>1）提高消费并行度<br>查看消费原因，一般是调用RPC或者操作数据库，如果后端数据库或外系统的承受的压力调用压力没有问题，则可以通过两种方式增加消费并行度：<br>1.1）同一个consumerGroup下，增加Consumer实例数量，但是超过订阅队列数的Consuemr无效）。<br>1.2）提高单个Consumer的消费并行度，通过修改参数 consumeThreadMin、consumeThreadMax实现。    </p>
-<p>2）批量方式消费<br>设置批量消费，consumeMessageBatchMaxSize设置为N</p>
-<p>3）跳过非重要消息<br>可以通过MAXOFFSET与当前OFFSET的对比来丢弃部分消息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    public ConsumeConcurrentlyStatus consumeMessage(</span><br><span class="line">        List&lt;MessageExt&gt; msgs,</span><br><span class="line">        ConsumeConcurrentlyContext context) &#123;</span><br><span class="line">    long offset = msgs.get(0).getQueueOffset();</span><br><span class="line">    String maxOffset =</span><br><span class="line">            msgs.get(0).getProperty(Message.PROPERTY_MAX_OFFSET);</span><br><span class="line">    long diff = Long.parseLong(maxOffset) - offset;</span><br><span class="line">    if (diff &gt; 100000) &#123;</span><br><span class="line">        // TODO 消息堆积情况的特殊处理</span><br><span class="line">        return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;</span><br><span class="line">    &#125;</span><br><span class="line">    // TODO 正常消费过程</span><br><span class="line">    return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>4）消费代码优化：db优化等    </p>
-<p>二、rocketMq设计<br>1、消息存储整体架构<br>1.1、commitlog<br>实际存储消息的文件，使用MAPPEDFILE机制<br>1.2、ConsumeQueue<br>消息消费队列，引入为了提高消息消费的性能，针对某topic的消息在commitlog中的位置的索引<br>1.3、IndexFile<br>key/时间区间来查询消息的方法，结构类似hashmap<br>2、页面缓存与内存映射<br>页面缓存是页缓存(PageCache)是OS对文件的缓存，加速文件读写。由于ConsumeQueue存储数据少，且顺序，所以pageCache机制预读机制，使得对ConsumeQueue的读性能几乎接近读内存。<br>commitlog是使用了memory mapped file机制，减少了一次拷贝，提高了读写效率。    </p>
-<p>三、负载均衡<br>1、producer负载均衡<br>直接根据nameserver中拉取到的broker信息，随机递增取模。有个sendLatencyFaultEnable机制，可以避免使用上次发送失败的broker。<br>2、Consuemr负载均衡<br>push/pull。push本质也是pull，其本质实现为消息拉取线程在从服务器拉取到一批消息后，然后提交到消息消费线程池后，又“马不停蹄”的继续向服务器再次尝试拉取消息。如果未拉取到消息，则延迟一下又继续拉取。    </p>
-<p>疑问:<br>1、如何查看消息被谁消费了<br>2、多topic对消费组的影响<br>3、消息堆积如何处理<br>4、消息不丢如何保证<br>5、超过订阅队列数的Consuemr无效？<br>6、消费并行度是否类似线程池的线程数量？<br>7、顺序消息实现<br>8、JVM配置项及其原因<br>9、nameserver数据不同步怎么办<br>10、sendFile、mmap了解<br>11、sendLatencyFaultEnable机制了解<br>12、push pull消费场景    </p>
-
-          
+          <p>4/24<br>一、rocketMQ最佳实践文档总结<br>1、生产者<br>1.1、一个应用尽可能用一个topic，子类型用tags来标识。消费时可以用tag来过滤。<br>reason：1）topic越少，consumeQueue文件越少，避免了打开多个文件，避免了更多的随机读写，更有可能顺序写。<br>2）给一个consumergroup消费多个topic的机会   </p>
+<p>1.2、sendResult状态<br>1）SEND_OK:<br>发送成功，并不意味着可靠。需要设置SYNC_MASTER/SYNC_FLUSH<br>2）FLUSH_DISK_TIMEOUT:<br>刷盘超时，消息已经保存到内存中。除非服务器宕机，消息才会丢。当设置了FlushDiskType=SYNC_FLUSH（默认为ASYNC_FLUSH)，当broker服务器未在同步刷盘时间内（默认为5s）完成刷盘，则返回该状态——刷盘超时<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/04/24/2020-04-20-26/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
