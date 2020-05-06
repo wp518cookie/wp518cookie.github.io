@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="麻屋">
 <meta property="og:description" content="4/24一、rocketMQ最佳实践文档总结1、生产者1.1、一个应用尽可能用一个topic，子类型用tags来标识。消费时可以用tag来过滤。reason：1）topic越少，consumeQueue文件越少，避免了打开多个文件，避免了更多的随机读写，更有可能顺序写。2）给一个consumergroup消费多个topic的机会    1.2、sendResult状态1）SEND_OK:发送成功，">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-04-26T09:12:49.591Z">
+<meta property="og:updated_time" content="2020-04-26T13:45:00.738Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="20&#x2F;4&#x2F;20~4&#x2F;26">
 <meta name="twitter:description" content="4/24一、rocketMQ最佳实践文档总结1、生产者1.1、一个应用尽可能用一个topic，子类型用tags来标识。消费时可以用tag来过滤。reason：1）topic越少，consumeQueue文件越少，避免了打开多个文件，避免了更多的随机读写，更有可能顺序写。2）给一个consumergroup消费多个topic的机会    1.2、sendResult状态1）SEND_OK:发送成功，">
@@ -372,13 +372,15 @@
 <p>4）消费代码优化：db优化等    </p>
 <p>二、rocketMq设计<br>1、消息存储整体架构<br>1.1、commitlog<br>实际存储消息的文件，使用MAPPEDFILE机制<br>1.2、ConsumeQueue<br>消息消费队列，引入为了提高消息消费的性能，针对某topic的消息在commitlog中的位置的索引<br>1.3、IndexFile<br>key/时间区间来查询消息的方法，结构类似hashmap<br>2、页面缓存与内存映射<br>页面缓存是页缓存(PageCache)是OS对文件的缓存，加速文件读写。由于ConsumeQueue存储数据少，且顺序，所以pageCache机制预读机制，使得对ConsumeQueue的读性能几乎接近读内存。<br>commitlog是使用了memory mapped file机制，减少了一次拷贝，提高了读写效率。    </p>
 <p>三、负载均衡<br>1、producer负载均衡<br>直接根据nameserver中拉取到的broker信息，随机递增取模。有个sendLatencyFaultEnable机制，可以避免使用上次发送失败的broker。<br>2、Consuemr负载均衡<br>push/pull。push本质也是pull，其本质实现为消息拉取线程在从服务器拉取到一批消息后，然后提交到消息消费线程池后，又“马不停蹄”的继续向服务器再次尝试拉取消息。如果未拉取到消息，则延迟一下又继续拉取。    </p>
-<p>疑问:<br>1、如何查看消息被谁消费了<br>2、多topic对消费组的影响<br>3、消息不丢如何保证<br>4、超过订阅队列数的Consuemr无效？<br>是的，readQueueNums&lt;writeQueueNums，则剩下的部分QueueId无法被消费<br>5、消费并行度是否类似线程池的线程数量？<br>6、顺序消息实现<br>1）局部顺序消息，需将根据某业务Id设置选取规则代替默认的轮转策略，同一个id到同一个queue即可<br>2）全局顺序消息需将messageQueue的数量设置为1，<br>7、JVM配置项及其原因<br>8、nameserver数据不同步怎么办<br>9、sendFile、mmap了解<br>10、sendLatencyFaultEnable机制了解<br>11、push pull消费场景    </p>
+<p>疑问:<br>1、如何查看消息被谁消费了<br>2、多topic对消费组的影响<br>3、消息不丢如何保证<br>4、超过订阅队列数的Consuemr无效？<br>是的，readQueueNums&lt;writeQueueNums，则剩下的部分QueueId无法被消费<br>5、消费并行度是否类似线程池的线程数量？    </p>
+<p>6、顺序消息实现<br>1）局部顺序消息，需将根据某业务Id设置选取规则代替默认的轮转策略，同一个id到同一个queue即可<br>2）全局顺序消息需将messageQueue的数量设置为1，<br>7、JVM配置项及其原因<br>8、nameserver数据不同步怎么办<br>9、sendFile、mmap了解<br>10、sendLatencyFaultEnable机制了解<br>11、push pull消费场景    </p>
 <p>4/25<br>一、事务消息流程：<br>1、事务消息发送及提交<br>发送消息，并设置TransactionListener，当预发送消息是sendOk触发TransactionListener#executeLocalTransaction，里头执行本地事务，根据返回的LocalTransactionState来决定事务消息是提交还是回滚。<br>2、补偿流程：<br>没有收到确切的事务的状态，则broker会发起回查，根据TransactionListener#checkLocalTransaction返回的状态来判断事务是提交还是回滚，反查默认15次，15次后还没有明确结果则默认事务回滚。    </p>
 <p>二、kafka与rocketMq对比：<br>1、数据可靠性：<br>刷盘方式：kafka使用异步刷盘，异步复制/同步复制，rocketMq支持同步刷盘，避免了crash导致的数据丢失<br>2、性能：<br>kafka单机写入TPS 百万条/s，rocketMq大约7万/s，因为kafka会在producer端合并多个小消息，批量发向broker<br>原因：<br>1）缓存过多消息，GC会有问题<br>2）kafka如果producer宕机，由于缓存了多个消息，会丢消息<br>3）不太有同时很大量消息要合并发送的场景<br>4）缓存可由上层业务完成，即上层缓存好有批量发送就完事了，干嘛直接在中间件层面缓存<br>5）kafka支持的队列不能太多，而rocketMq支持5万个，负载不会发生明显变化，队列数支持的越多，意味着单机支持的topic越多。同时队列数越大，支持的消费集群也越大。<br>3、消息失败重试，kafka不支持，rocketMq支持<br>4、rocketMq支持严格的顺序消息，kafka不支持，因为会重新选举？<br>5、定时消息，kafka不支持<br>6、kafka不支持消息查询，rocketMq支持根据消息标识查询，也支持根据内容查询。kafka支持按照偏移来回溯消息，rocketMq支持按照时间来回溯消息。<br>7、rocketMq消费并行度更高：<br>Kafka的消费并行度依赖Topic配置的分区数，如分区数为10，那么最多10台机器来并行消费（每台机器只能开启一个线程），或者一台机器消费（10个线程并行消费）。即消费并行度和分区数一致。<br>RocketMQ消费并行度分两种情况：<br>1）顺序消费方式并行度同卡夫卡完全一致<br>2）乱序方式并行度取决于Consumer的线程数，如Topic配置10个队列，10台机器消费，每台机器100个线程，那么并行度为1000。   </p>
 <p>三、零拷贝<br>到底什么是零拷贝:零拷贝不是没有数据拷贝，而是不需要cpu在内存层面来回拷贝。<br>DMA（Direct Memory Access），直译为直接内存访问，是一种无需CPU的参与就可以让外设与系统内存之间进行双向数据传输的硬件机制。<br>当我们普通的读取文件并发送，需要4次拷贝，DMA从磁盘到读缓冲区，再通过cpu从读缓冲区到用户态的内存中，再通过cpu从用户态的内存到socket缓冲区，再由DMA从socket缓冲区到网卡缓冲区。而零拷贝就是借助DMA，直接从磁盘到读缓冲区，读缓冲区到socket缓冲区。避免了cpu在内存层面的来回数据拷贝。    </p>
-<p>疑问：<br>1、事务消息如果listener中commit超时，反查已经结束并rollback了，这时候commit了会怎样？<br>还是会触发commit<br>2、为什么kafka不支持太多队列<br><a href="https://www.confluent.io/blog/how-choose-number-topics-partitions-kafka-cluster/" target="_blank" rel="noopener">https://www.confluent.io/blog/how-choose-number-topics-partitions-kafka-cluster/</a><br>3、mmap vs sendfile 以及在kafka和rocketmq中的实现及优劣<br>4、kafka的消费模型    </p>
-<p>4/26<br>一、spring cloud<br>1、ribbon  负载均衡的实现<br>二、redis分布式锁<br><a href="http://zhangtielei.com/posts/blog-redlock-reasoning.html" target="_blank" rel="noopener">http://zhangtielei.com/posts/blog-redlock-reasoning.html</a><br>1、单节点分布式锁的实现要注意如下几点：<br>1.1设置的锁必须有过期时间<br>1.2获取锁和设置过期时间必须是原子操作，避免设置了锁后，发生了网络分割无法与redis通信，则客户端1将一直持有该锁<br>1.3要塞入一个随机值，why？避免如下情况：<br>客户端1获取到了锁，但是操作一直被阻塞了，直到锁过期了<br>客户端2由于锁过期了获取到了该锁，若是没有随机字符窜的限制，则等1完成操作后，会将2的锁解掉，这样后续客户端2对资源的访问无法有锁的保护<br>1.4解锁的必须是lua脚本：主要进行如下几步：<br>get（key）的值与自己的随机字符串进行比对，若相同则删除。这一整套操作必须是原子性的<br>why：<br>当客户1删除时，get通过了，此时锁过期了，客户端2拿到了锁，再执行del操作，把2的锁给删除了。<br>1.5最关键的问题：failover问题<br>客户端1从master获取了锁，宕机了，来不及同步到slave上，<br>slave升级为master，客户端2从新master上也获得了锁，这个咋解决内？</p>
-<p>疑问：<br>1、ribbon深入了解其负载流程<br>2、hystrix深入了解<br>3、redis的序列化机制，及数据结构实现和使用场景    </p>
+<p>疑问：<br>1、事务消息如果listener中commit超时，反查已经结束并rollback了，这时候commit了会怎样？<br>还是会触发commit<br>2、为什么kafka不支持太多队列<br><a href="https://www.confluent.io/blog/how-choose-number-topics-partitions-kafka-cluster/" target="_blank" rel="noopener">https://www.confluent.io/blog/how-choose-number-topics-partitions-kafka-cluster/</a><br>3、mmap vs sendfile 以及在kafka和rocketmq中的实现及优劣<br>4、kafka的消费模型<br>5、rocketMQ的消费offset Ack机制：<br>是批量ack，导致当第一条未消费成功时，后续99条消费成功了也无法更新broker的offset值，当此时broker宕机，则导致后续的99条会被重复消费。这个值默认是2000，当RocketMQ发现本地缓存的消息的最大值-最小值差距大于这个值（2000）的时候，会触发流控——也就是说如果头尾都卡住了部分消息，达到了这个阈值就不再拉取消息。<br>6、rocketmq重试机制</p>
+<p>4/26<br>一、spring cloud<br>1、ribbon  负载均衡的实现<br>二、redis分布式锁<br><a href="http://zhangtielei.com/posts/blog-redlock-reasoning.html" target="_blank" rel="noopener">http://zhangtielei.com/posts/blog-redlock-reasoning.html</a><br>1、单节点分布式锁的实现要注意如下几点：<br>1.1设置的锁必须有过期时间<br>1.2获取锁和设置过期时间必须是原子操作，避免设置了锁后，发生了网络分割无法与redis通信，则客户端1将一直持有该锁<br>1.3要塞入一个随机值，why？避免如下情况：<br>客户端1获取到了锁，但是操作一直被阻塞了，直到锁过期了<br>客户端2由于锁过期了获取到了该锁，若是没有随机字符窜的限制，则等1完成操作后，会将2的锁解掉，这样后续客户端2对资源的访问无法有锁的保护<br>1.4解锁的必须是lua脚本：主要进行如下几步：<br>get（key）的值与自己的随机字符串进行比对，若相同则删除。这一整套操作必须是原子性的<br>why：<br>当客户端1删除时，get通过了，此时锁过期了，客户端2拿到了锁，再执行del操作，把2的锁给删除了。<br>1.5最关键的问题：failover问题<br>客户端1从master获取了锁，宕机了，来不及同步到slave上，<br>slave升级为master，客户端2从新master上也获得了锁，这个咋解决内？</p>
+<p>三、zk分布式锁相对简单<br>1、获取流程<br>1.1、客户端1创建临时节点表示获取了锁，通过自己的删除或者session的失效来实现锁的释放<br>1.2、客户端2创建节点时失败，因为已有该节点，则watch该节点，删除时再发去锁的获取<br>2、跟redis对比的优势：<br>2.1、客户端可以持有锁任意长的时间，确保资源访问操作的完成再释放锁<br>2.2、避免类似重试机制，而是一种类似本地锁的运行机制，获取失败后阻塞，等待被唤醒<br>3、失效的场景：<br>客户端1创建了znode节点/lock，获得了锁。<br>客户端1进入了长时间的GC pause。<br>客户端1连接到ZooKeeper的Session过期了。znode节点/lock被自动删除。<br>客户端2创建了znode节点/lock，从而获得了锁。<br>客户端1从GC pause中恢复过来，它仍然认为自己持有锁。    </p>
+<p>疑问：<br>1、ribbon深入了解其负载流程<br>2、hystrix深入了解<br>3、redis的序列化机制，及数据结构实现和使用场景<br>4、1.5中的问题怎么解决的(redisson)<br>5、zookeeper如何避免羊群效应   </p>
 
       
     </div>
@@ -489,7 +491,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
