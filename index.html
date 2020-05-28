@@ -361,10 +361,15 @@
 
       
         
-          
-            <p>一、Jraft了解<br>1、应用场景：leader选举、分布式锁、高可靠元信息管理、分布式存储。<br>2、结构：<br><img src="/2020/05/26/20-5-24-31/20_05_26_01.png" alt="jraft结构">    </p>
-
-          
+          <p>5.26<br>一、Jraft了解<br>1、应用场景：leader选举、分布式锁、高可靠元信息管理、分布式存储。<br>2、结构：<br><img src="/2020/05/26/20-5-24-31/20_05_26_01.png" alt="jraft结构"><br>2.1、StateMachine: 状态机，根据命令（log)来计算具体状态及中的值<br>2.2、Log Manager: 日志管理器，存储发来的命令日志<br>2.3、Snapshot Executor: 快照执行器<br>作用：新Node加入集群时，不需要全量日志复制，仅需复制快照<br>2.4、Replicator: 命令复制器，有几个follower就有几个,支持并行复制，当半数复制成功即可到状态及中执行<br>3、流程：<br>client向Node发送类似“存100元”命令，Log存储模块先将命令以Log形式存储到本地。同时Replicator把日志复制到其他Node。半数以上返回复制成功后，即可将该Log及之前的Log有序发送到状态机中执行。状态机的执行由具体使用场景来确定执行逻辑。</p>
+<p>二、选举主线任务：<br>1、candidate被ET触发<br>2、candidate发起pre-vote，为了避免candidate自己的原因而没收到leader的命令，导致不停的触发Term的递增<br>3、follower判断是否认可该pre-vote request<br>4、candidate根据pre-vote response来决定是否发起requestVoteRequest<br>5、follower判断是否认可该requestVoteRequest<br>6、Candidate根据response来判断自己是否当选<br></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/05/26/20-5-24-31/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
