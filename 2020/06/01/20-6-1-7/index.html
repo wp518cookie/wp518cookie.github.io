@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="每日总结," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="6.1网络层一、MTU1、不同数据链路中，MTU的大小也各不相同。当遇到需要传输数据大于MTU限制，会被分片传输。分片传输会加大路由器的负担，而且一旦某一分片异常没有到达，会导致整个IP数据报报废。2、路径MTU2.1、定义：发送端主机到接收端主机之间不需要分片的最大MTU大小，即整个路由链路上中的最小MTU。然后主机根据MTU来提前分片后发送。避免在路由器上的分片处理，且可以在TCP中发送更大的">
+<meta name="keywords" content="每日总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="20-6-1-7">
+<meta property="og:url" content="http://yoursite.com/2020/06/01/20-6-1-7/index.html">
+<meta property="og:site_name" content="麻屋">
+<meta property="og:description" content="6.1网络层一、MTU1、不同数据链路中，MTU的大小也各不相同。当遇到需要传输数据大于MTU限制，会被分片传输。分片传输会加大路由器的负担，而且一旦某一分片异常没有到达，会导致整个IP数据报报废。2、路径MTU2.1、定义：发送端主机到接收端主机之间不需要分片的最大MTU大小，即整个路由链路上中的最小MTU。然后主机根据MTU来提前分片后发送。避免在路由器上的分片处理，且可以在TCP中发送更大的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/06/01/20-6-1-7/image1.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/01/20-6-1-7/image2.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/01/20-6-1-7/image3.png">
+<meta property="og:updated_time" content="2020-06-03T10:50:13.424Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="20-6-1-7">
+<meta name="twitter:description" content="6.1网络层一、MTU1、不同数据链路中，MTU的大小也各不相同。当遇到需要传输数据大于MTU限制，会被分片传输。分片传输会加大路由器的负担，而且一旦某一分片异常没有到达，会导致整个IP数据报报废。2、路径MTU2.1、定义：发送端主机到接收端主机之间不需要分片的最大MTU大小，即整个路由链路上中的最小MTU。然后主机根据MTU来提前分片后发送。避免在路由器上的分片处理，且可以在TCP中发送更大的">
+<meta name="twitter:image" content="http://yoursite.com/2020/06/01/20-6-1-7/image1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/01/20-6-1-7/"/>
+
+
+
+
+
+  <title>20-6-1-7 | 麻屋</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">麻屋</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/01/20-6-1-7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ping wu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="麻屋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">20-6-1-7</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-01T09:53:57+08:00">
+                2020-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/每日总结/" itemprop="url" rel="index">
+                    <span itemprop="name">每日总结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>6.1<br>网络层<br>一、MTU<br>1、不同数据链路中，MTU的大小也各不相同。当遇到需要传输数据大于MTU限制，会被分片传输。分片传输会加大路由器的负担，而且一旦某一分片异常没有到达，会导致整个IP数据报报废。<br>2、路径MTU<br>2.1、定义：<br>发送端主机到接收端主机之间不需要分片的最大MTU大小，即整个路由链路上中的最小MTU。然后主机根据MTU来提前分片后发送。避免在路由器上的分片处理，且可以在TCP中发送更大的包。<br>2.2、原理：<br>UDP中IP数据报设置禁止分片标志符，一旦路由器遇到需要分片才能处理的大包，不进行分片，而是将包丢弃，并返回ICMP不可大达消息将MTU值发回主机。主机根据MTU分好片后再循环之前的操作，直到没有收到任何ICMP。<br>TCP的情况下则是根据MTU计算出MSS长度，直接在TCP层就拆好包，避免了IP的分片。    </p>
+<p>二、IP层的协议<br>1、ARP：Address Resolution Protocol<br>通过广播根据IP获取MAC的协议<br>2、ICMP：Internet Control Message ProtocolAddress Resolution Protocol<br>检测网络是否通，例如PING命令，并告知错误原因等。     </p>
+<a id="more"></a>
+<p>三、IP应用相关<br>1、DNS: (domain name system)<br>2、DHCP: (dynamic host configuration protocol<br>3、NAT: Network Address Translator，支持本地网络中使用私有地址<br>3.1、工作机制：<br>支持大量私有的Ip向公网进行通信，通过将私有Ip用公网IP+端口的方式建立映射关系，来跟公网进行通信，理论上支持65000个主机同时共用一个公有IP地址    </p>
+<p>传输层<br>一、socket<br>1、套接字的唯一定义：源IP地址+目标IP地址+协议号+源端口号+目标端口号<br>2、通信时端口的确认<br>2.1、标准既定的端口号<br>每个应用程序都有其指定的端口号，不能随意使用，比如http默认80，ssh默认22等<br>2.2、时序（动态）分配的端口号<br>客户端的端口可以由服务端随意分配    </p>
+<p>二、UDP<br>1、无连接，直接发，无法进行拥塞控制及重发及顺序保证。<br>2、使用场景：<br>2.1、包总量较少（DNS）<br>2.2、视屏、音频<br>2.3、广播通信    </p>
+<p>三、TCP<br>TCP通过校验和、序列号、确认应答、重发控制、连接管理及窗口控制等机制实现可靠传输<br>1、序列化与确认应答<br>数据会标明数据的序列号，应答会告知下一步接收的序列号<br>2、如何判断需要重发<br>会根据RTT时间，动态调整，到一定次数后便会放弃重发<br>3、连接建立：<br>syn + seqA——&gt; ack (seqA + 1) syn (seqB) -&gt; ack(seqB)<br>只有两次的话，当客户端的syn包延迟到达了，以至于连接都已经建立并关闭或者ack包迟迟未到客户端，服务端却以为连接已经建立了，一直等待着。<br>4、四次挥手：<br>如何判断数据已经发完了，得有个机制，就是FIN机制，表明已经没有数据发送了。<br>FIN + seqA ——&gt; ack (seqA + 1) , Fin(seqB) ——&gt; ack(seqB + 1)<br>5、MSS:maximum segment size， 最大消息的长度<br>最理想的情况是长度刚好是IP中不会被分片的最大数据长度   </p>
+<p>6.2<br>一、TCP<br>1、利用窗口控制提高速度<br>这个MSS值在sync时会带上，避免IP触发分片。<br>为了避免干等上个应答，TCP引入了窗口概念。窗口大小就是说无需等待确认应答而可以继续发送数据的最大值。<br>2、重发控制<br>2.1超时重传机制：<br>根据RTT估算出超时的时间，来重传<br>2.2快速重传机制：<br>当连续3次收到同一个序列号的应答，则会对该数据进行重发，比超时管理更高效。<br>3、流量控制<br>TCP首部中会有一个字段用来通知发送方自己的缓冲区大小，避免溢出。当缓冲区慢了，tcp会返回报错。<br>4、拥塞控制<br>TCP慢启动机制，防止一上来发送大量数据，导致网络拥堵。慢启动时，拥塞窗口的大小设置为1MSS。    </p>
+<p>二、HTTP<br>1、http1.0,1.1,2.0<br>http1.0:每个http请求建立的tcp链接无法复用，需要频繁的三次握手<br>http1.1:<br>1.1、支持长连接，支持一个连接中进行多次http请求，不需要等待上一次请求结果返回即可发出下个请求<br>1.2、新增了HOST首部，支持在同一台IP的机器上部署多个app，通过host来区分到底访问哪个网站   </p>
+<p>三、https(http + ssl)<br>1、SSL(Secure Socket Layer)<br>http是http ——&gt; tcp ，https是http ——&gt; ssl ——&gt; TCP<br>2、加密算法<br>2.1、对称加密算法：加密解密用的是用一个key<br>例如：DES，AES<br>优点：速度块，加密效率高<br>缺点：密钥如果要唯一，量很大。同时密钥一旦泄露，加密信息不安全。特别网络请求，怎么把密钥给别人？所以对称加密就很扯淡。<br>2.2、非对称加密算法<br>例如：RSA<br>一对密钥由公钥和私钥组成。公钥能解密私钥加密的数据，反之亦然。<br>优点：安全<br>缺点：效率低<br>2.3、SSL连接建立过程<br>连接还是照常建立，连接建立后，进行下述操作。<br>1、客户端发起Client Hello开始SSL通信，报文中包含客户端支持的SSL指定版本，加密组件等。<br>2、服务端收到客户端SSL请求后，会发送客户端支持的SSL版本及加密组件。<br>3、服务端发送公钥<br>4、服务端告知Server Hello Done报文通知客户端,最初阶段的SSL握手协商部分结束。<br>5、SSL第一次握手结束后，客户端验证完公钥后，客户端以Client Key Exchange报文作为回应，同时会带上公钥加密的随机密码串。<br>6、客户端继续发送Change Cipher Spec报文，提示服务器之后通信用之前的密码串。<br>7、客户端发送全部报文的整体校验值。<br>8、服务端同样发送Change Cipher Spec报文<br>9、服务端同样发送Finish报文<br>10、报文交换完毕后，SSL才算完成。<br><img src="/2020/06/01/20-6-1-7/image1.png" alt="SSL连接建立示意图">      </p>
+<p>四、公司dump文件相关<br>1、System<br><img src="/2020/06/01/20-6-1-7/image2.png" alt="System相关内容"><br>1.1、当前负载：uptime<br>当前负载： 14:19:04 up 156 days, 11:08, 0 users, load average: 12.51, 14.87, 19.32<br>解释：    当前时间  |系统运行时间         | 当前登陆用户          | 最近1分钟、5分钟、15分钟系统平均负载<br>平均负载：系统处于可运行状态和不可中断状态的平均进程数，即平均活跃进程数。<br>可运行状态：  正在使用CPU或者正在等待CPU的进程，即PS命令时，处于R状态（Running或Runnable)的进程。<br>不可中断状态：正处于内核态关键流程中的进程，且这些流程不可打断，如等待硬件设备的IO响应。如向磁盘写数据，为了保证一致性，在得到磁盘回复前不允许被其他进程中断。<br>最理想的平均负载是等于cpu个数，可通过top命令<br>1.2、free命令<br>              total        used        free      shared       buff/cache   available<br>Mem:        8010792     4017344      138820         668         3854628     3663040<br>Swap:             0           0           0<br>total：总可用物理内存 used：已使用物理内存 free：真正尚未被使用的物理内存 shared:被共享使用的物理内存<br>buff/cache: 被buffer或者cache使用的物理内存  avaliable：还可以被应用程序使用的物理内存大小<br>buffer: 传输速率快的硬件到慢的硬件<br>cache:  传输速度慢的硬件到快的硬件<br><img src="/2020/06/01/20-6-1-7/image3.png" alt="buff/cache"><br>（<a href="https://www.cnblogs.com/M18-BlankBox/p/5326484.html）" target="_blank" rel="noopener">https://www.cnblogs.com/M18-BlankBox/p/5326484.html）</a><br>1.3、top命令<br>top - 14:19:05 up 156 days, 11:08,  0 users,  load average: 12.51, 14.87, 19.32<br>Tasks:   5 total,   1 running,   4 sleeping,   0 stopped,   0 zombie<br>%Cpu(s):  7.4 us,  2.3 sy,  0.0 ni, 88.6 id,  0.0 wa,  0.0 hi,  1.6 si,  0.0 st<br>KiB Mem : 49261756 total, 10603224 free, 18104556 used, 20553976 buff/cache<br>KiB Swap:   524284 total,   505852 free,    18432 used. 29660320 avail Mem     </p>
+<p>  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND<br>   28 root      20   0 22.018g 8.387g  24868 S  1207 17.9   6538:01 /opt/jdk1.+<br>    1 root      20   0  265328   2276     92 S   0.0  0.0   0:02.60 /pause<br>   40 root      20   0    4328    652    548 S   0.0  0.0   0:00.01 /bin/sh -c+<br>   46 root      20   0  906028  44616  12376 S   0.0  0.1   4:47.07 node /opt/+<br>28440 root      20   0   59248   1912   1464 R   0.0  0.0   0:00.01 top -b -c +<br>1.3.1、第一行同uptime命令<br>1.3.2、tasks:<br>total：总进程   running：运行    sleeping：休眠   stopped：停止    zombie：僵尸进程<br>1.3.3、cpu状态：<br>us - 用户态占用CPU百分比    sy - 内核态占用CPU百分比     ni - 改变过优先级的进程占用CPU的百分比<br>id - CPU空闲百分比         wa - IO等待占用CPU的百分比   hi - 硬中断占用CPU的百分比<br>si - 软中断占用CPU的百分比  st - 虚拟机占用百分比<br>1.3.4、内存状态：<br>total: 物理内存总量   used: 使用中的内存总量<br>free : 空闲内存总量   cache/buffers: 缓存的内存量<br>1.3.5、swap交换分区<br>1.3.6、各进程的状态监控<br>PID：进程id<br>USER：进程所有者<br>PR：进程优先级<br>NI：负值表示高优先级，正值表示低优先级<br>VIRT：进程使用的虚拟内存总量： VIRT = SWAP + RES<br>RES：进程使用的、未被置换的物理内存大小<br>SHR：共享内存大小（Kb）<br>S  ：进程状态。D=不可中断的睡眠状态 R=运行 S=睡眠 T=跟踪/停止 Z=僵尸进程<br>%CPU：上次更新到现在的CPU时间占用百分比<br>%MEM：进程使用的物理内存百分比<br>TIME+：进程使用的CPU时间总计，1/100秒？<br>COMMAND：进程命令    </p>
+<p>2、jstack PID<br>2.1、java.lang.Thread.State:<br>NEW：未启动的，不会出现在DUMP中<br>RUNNABLE：运行中的<br>BLOCKED：受阻塞并等待监视器锁（被Synchronizers)给block住了<br>WAIT：无限期等待另一个线程执行特定操作，park(),wait(),sleep()<br>TIMED_WAITING：有时限的等待另一个线程的特定操作 wait(timeout)<br>TERMINATED：已退出的    </p>
+<p>3、jstat_gc<br>3.1、jstat -gcutil PID 1s 5<br>S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT<br>0.00 100.00  86.29  76.00  97.17  94.66    674   22.246     0    0.000   22.246<br>0.00 100.00  86.71  76.00  97.17  94.66    674   22.246     0    0.000   22.246<br>0.00 100.00  87.92  76.00  97.17  94.66    674   22.246     0    0.000   22.246<br>0.00 100.00  88.65  76.00  97.17  94.66    674   22.246     0    0.000   22.246<br>0.00 100.00  88.83  76.00  97.17  94.66    674   22.246     0    0.000   22.246    </p>
+<p>S0:第一个survior使用百分比  S1:第二个survior使用百分比<br>E:Eden的使用百分比         O: 老年代使用百分比<br>M:方法区使用百分比          CCS:压缩类使用百分比？<br>YGC:年轻代垃圾回收次数      YGCT:年轻代垃圾回收消耗时间<br>FGC:老年代垃圾回收次数      FGCT:老年代垃圾回收消耗时间<br>GCT:垃圾回收消耗总时间    </p>
+<p>疑问：<br>1、Nagle算法<br>2、TCP首部中的窗口大小作用<br>网络传输过程中的流量控制。<br>3、拥塞控制算法<br>4、http2.0到底干了啥<br>5、RSA加密算法了解<br>6、swap交换分区作用<br>7、top5如何获得<br>8、jstat工具    </p>
+<p>6.3<br>一、JIT<br>1、什么情况下会触发JIT<br>方法调用计数器和循环回边计数器达到某阈值后，会进入编译队列，队列由一个或者多个后台线程来异步处理。<br>-XX:CICompilerCount=N设置JVM队列处理线程总数，c1和c2线程数量比为1:2。<br>2、方法内联<br>是JIT编译在运行时完成，当方法的调用次数达到一定阈值的方法调用替换为方法体本身<br>2.1、限制条件：<br>1）调用次数是否达标<br>2）被调用方的方法大小是否合适<br>3）被调用方运行时其实现是否可以唯一确定<br>2.2、针对虚方法的去虚化<br>1）完全去虚化：通过类型推导或者类层次分析。<br>2）条件去虚化：直接把class判断展开写死在代码里。<br>3、逃逸分析：判断新建的对象是否会被其他线程访问到<br>开启逃逸分析后，会采取更激进的优化措施。</p>
+<p>疑问：<br>1、什么时候C1编译，什么时候C2编译<br>2、看下Arrays.sort源码</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/每日总结/" rel="tag"># 每日总结</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/26/20-5-24-31/" rel="next" title="20-5-24-31">
+                <i class="fa fa-chevron-left"></i> 20-5-24-31
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/03/20年6月待读/" rel="prev" title="20年6月待读">
+                20年6月待读 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ping wu</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ping wu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="每日总结," />
+  <meta name="keywords" content="待读blog," />
 
 
 
@@ -79,20 +79,18 @@
 
 
 
-<meta name="description" content="5.26一、Jraft了解1、应用场景：leader选举、分布式锁、高可靠元信息管理、分布式存储。2、结构：2.1、StateMachine: 状态机，根据命令（log)来计算具体状态及中的值2.2、Log Manager: 日志管理器，存储发来的命令日志2.3、Snapshot Executor: 快照执行器作用：新Node加入集群时，不需要全量日志复制，仅需复制快照2.4、Replicator">
-<meta name="keywords" content="每日总结">
+<meta name="description" content="一、JIT编译器相关https://blog.csdn.net/qq_28674045/article/details/51896129二、GC相关1、Minor GC和Full GC的区别是什么？触发条件呢？：https://www.zhihu.com/question/41922036/answer/93079526    2、关于CMS、G1垃圾回收器的重新标记、最终标记疑惑?：https:">
+<meta name="keywords" content="待读blog">
 <meta property="og:type" content="article">
-<meta property="og:title" content="20-5-24-31">
-<meta property="og:url" content="http://yoursite.com/2020/05/26/20-5-24-31/index.html">
+<meta property="og:title" content="20年6月待读">
+<meta property="og:url" content="http://yoursite.com/2020/06/03/20年6月待读/index.html">
 <meta property="og:site_name" content="麻屋">
-<meta property="og:description" content="5.26一、Jraft了解1、应用场景：leader选举、分布式锁、高可靠元信息管理、分布式存储。2、结构：2.1、StateMachine: 状态机，根据命令（log)来计算具体状态及中的值2.2、Log Manager: 日志管理器，存储发来的命令日志2.3、Snapshot Executor: 快照执行器作用：新Node加入集群时，不需要全量日志复制，仅需复制快照2.4、Replicator">
+<meta property="og:description" content="一、JIT编译器相关https://blog.csdn.net/qq_28674045/article/details/51896129二、GC相关1、Minor GC和Full GC的区别是什么？触发条件呢？：https://www.zhihu.com/question/41922036/answer/93079526    2、关于CMS、G1垃圾回收器的重新标记、最终标记疑惑?：https:">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2020/05/26/20-5-24-31/20_05_26_01.png">
-<meta property="og:updated_time" content="2020-06-01T11:18:54.003Z">
+<meta property="og:updated_time" content="2020-06-04T13:51:44.544Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="20-5-24-31">
-<meta name="twitter:description" content="5.26一、Jraft了解1、应用场景：leader选举、分布式锁、高可靠元信息管理、分布式存储。2、结构：2.1、StateMachine: 状态机，根据命令（log)来计算具体状态及中的值2.2、Log Manager: 日志管理器，存储发来的命令日志2.3、Snapshot Executor: 快照执行器作用：新Node加入集群时，不需要全量日志复制，仅需复制快照2.4、Replicator">
-<meta name="twitter:image" content="http://yoursite.com/2020/05/26/20-5-24-31/20_05_26_01.png">
+<meta name="twitter:title" content="20年6月待读">
+<meta name="twitter:description" content="一、JIT编译器相关https://blog.csdn.net/qq_28674045/article/details/51896129二、GC相关1、Minor GC和Full GC的区别是什么？触发条件呢？：https://www.zhihu.com/question/41922036/answer/93079526    2、关于CMS、G1垃圾回收器的重新标记、最终标记疑惑?：https:">
 
 
 
@@ -122,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/05/26/20-5-24-31/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/06/03/20年6月待读/"/>
 
 
 
 
 
-  <title>20-5-24-31 | 麻屋</title>
+  <title>20年6月待读 | 麻屋</title>
   
 
 
@@ -275,7 +273,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/26/20-5-24-31/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/03/20年6月待读/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ping wu">
@@ -292,7 +290,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">20-5-24-31</h1>
+          <h1 class="post-title" itemprop="name headline">20年6月待读</h1>
         
 
         <div class="post-meta">
@@ -304,8 +302,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-26T14:25:11+08:00">
-                2020-05-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-03T10:33:50+08:00">
+                2020-06-03
               </time>
             
 
@@ -314,28 +312,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/每日总结/" itemprop="url" rel="index">
-                    <span itemprop="name">每日总结</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -364,13 +340,9 @@
       
 
       
-        <p>5.26<br>一、Jraft了解<br>1、应用场景：leader选举、分布式锁、高可靠元信息管理、分布式存储。<br>2、结构：<br><img src="/2020/05/26/20-5-24-31/20_05_26_01.png" alt="jraft结构"><br>2.1、StateMachine: 状态机，根据命令（log)来计算具体状态及中的值<br>2.2、Log Manager: 日志管理器，存储发来的命令日志<br>2.3、Snapshot Executor: 快照执行器<br>作用：新Node加入集群时，不需要全量日志复制，仅需复制快照<br>2.4、Replicator: 命令复制器，有几个follower就有几个,支持并行复制，当半数复制成功即可到状态及中执行<br>3、流程：<br>client向Node发送类似“存100元”命令，Log存储模块先将命令以Log形式存储到本地。同时Replicator把日志复制到其他Node。半数以上返回复制成功后，即可将该Log及之前的Log有序发送到状态机中执行。状态机的执行由具体使用场景来确定执行逻辑。</p>
-<p>二、选举主线任务：<br>1、candidate被ET触发<br>2、candidate发起pre-vote，为了避免candidate自己的原因而没收到leader的命令，导致不停的触发Term的递增<br>3、follower判断是否认可该pre-vote request<br>4、candidate根据pre-vote response来决定是否发起requestVoteRequest<br>5、follower判断是否认可该requestVoteRequest<br>6、Candidate根据response来判断自己是否当选<br><a id="more"></a></p>
-<p>疑问：<br>1、candidate和follower区别</p>
-<p>5.28<br>一、ReentrantReadWriteLock读写锁<br>1、读锁、写锁可分开加锁解锁，读读不互斥、读写、写写互斥，适合读大于写的场景<br>2、支持可重入，已获取写锁的线程可以再次获取读锁<br>二、使用场景分析：读大于写<br>读写分两个方法，读方法加读锁，写方法加写锁，可以例如直接用hashmap实现一个本地缓存。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public Object get(String key) &#123;</span><br><span class="line">  r.lock();</span><br><span class="line">  try &#123;</span><br><span class="line">    return map.get(key);</span><br><span class="line">  &#125; finally &#123;</span><br><span class="line">    r.unlock();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public Object put(String key, Object value) &#123;</span><br><span class="line">  w.lock();</span><br><span class="line">  try &#123;</span><br><span class="line">    return map.put(key, value);</span><br><span class="line">  &#125; finally &#123;</span><br><span class="line">    w.unlock();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>三、实现<br>1、基于Aqs实现，state高十六位保留了读锁获取次数，低16位表示写锁重入次数。</p>
-<p>5.30<br>一、Ip基础知识<br>1、子网掩码作用：区分网络号和主机号，将之前的几级分类细分成粒度更小的单位，避免主机过多或过少时造成的IP浪费，可以快速判断是否在同一个网络上，方便路由器快速转发。<br>2、MTU：Maximum Transmission Unit 最大传输单元<br>2.1、IP层的数据包超过这个大小时，会进行分片。尽量将类似操作放在tcp中进行，所以在tcp中会有设置MSS MaximumSegmentSize，避免ip层分包，而是在tcp层进行拆包，方便重传等。<br>2.2、为何需要设置MTU大小呢？因为网络带宽是有大小限制的，如果没有限制，发个1G的数据包就炸了。</p>
-<p>疑问：<br>1、网络通信过程中，不知道对方mac地址的情况下如何通信。比如http请求时，根本不知道你会跟哪个节点进行网络通信。<br>猜想：先塞的是已知ip地址对应路由器的mac地址。然后到了下一站后替换以太网头部的mac地址。<br>结果：猜对了，路由是通过ARP协议一站站地获取下一跳的MAC地址，并更改数据包中的MAC地址。<br>2、路由转发协议<br>3、Ip组包失败会怎样？<br>会导致整个Ip数据报报废。<br>4、sendFile和mmap区别</p>
+        <p>一、JIT编译器相关<br><a href="https://blog.csdn.net/qq_28674045/article/details/51896129" target="_blank" rel="noopener">https://blog.csdn.net/qq_28674045/article/details/51896129</a><br>二、GC相关<br>1、Minor GC和Full GC的区别是什么？触发条件呢？：<br><a href="https://www.zhihu.com/question/41922036/answer/93079526" target="_blank" rel="noopener">https://www.zhihu.com/question/41922036/answer/93079526</a>   </p>
+<p>2、关于CMS、G1垃圾回收器的重新标记、最终标记疑惑?：<br><a href="https://www.zhihu.com/question/37028283/answer/78008095" target="_blank" rel="noopener">https://www.zhihu.com/question/37028283/answer/78008095</a><br>3、主流的垃圾回收机制都有哪些?：<br><a href="https://www.zhihu.com/question/32373436/answer/56461502" target="_blank" rel="noopener">https://www.zhihu.com/question/32373436/answer/56461502</a><br>4、java的gc为什么要分代：<br><a href="https://www.zhihu.com/question/53613423/answer/135743258" target="_blank" rel="noopener">https://www.zhihu.com/question/53613423/answer/135743258</a><br>4.1、GC Root<br>比如栈上的引用，minorGC时，old gen代指向young gen的部分等。</p>
+<p>疑问：</p>
 
       
     </div>
@@ -388,7 +360,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/每日总结/" rel="tag"># 每日总结</a>
+            <a href="/tags/待读blog/" rel="tag"># 待读blog</a>
           
         </div>
       
@@ -401,8 +373,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/05/07/20年5月待读/" rel="next" title="20年5月待读">
-                <i class="fa fa-chevron-left"></i> 20年5月待读
+              <a href="/2020/06/01/20-6-1-7/" rel="next" title="20-6-1-7">
+                <i class="fa fa-chevron-left"></i> 20-6-1-7
               </a>
             
           </div>
@@ -410,10 +382,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/06/01/20-6-1-7/" rel="prev" title="20-6-1-7">
-                20-6-1-7 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
