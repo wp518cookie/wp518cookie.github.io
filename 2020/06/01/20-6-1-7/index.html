@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://yoursite.com/2020/06/01/20-6-1-7/image1.png">
 <meta property="og:image" content="http://yoursite.com/2020/06/01/20-6-1-7/image2.png">
 <meta property="og:image" content="http://yoursite.com/2020/06/01/20-6-1-7/image3.png">
-<meta property="og:updated_time" content="2020-06-03T10:50:13.424Z">
+<meta property="og:updated_time" content="2020-06-09T02:16:10.049Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="20-6-1-7">
 <meta name="twitter:description" content="6.1网络层一、MTU1、不同数据链路中，MTU的大小也各不相同。当遇到需要传输数据大于MTU限制，会被分片传输。分片传输会加大路由器的负担，而且一旦某一分片异常没有到达，会导致整个IP数据报报废。2、路径MTU2.1、定义：发送端主机到接收端主机之间不需要分片的最大MTU大小，即整个路由链路上中的最小MTU。然后主机根据MTU来提前分片后发送。避免在路由器上的分片处理，且可以在TCP中发送更大的">
@@ -382,8 +382,10 @@
 <p>3、jstat_gc<br>3.1、jstat -gcutil PID 1s 5<br>S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT<br>0.00 100.00  86.29  76.00  97.17  94.66    674   22.246     0    0.000   22.246<br>0.00 100.00  86.71  76.00  97.17  94.66    674   22.246     0    0.000   22.246<br>0.00 100.00  87.92  76.00  97.17  94.66    674   22.246     0    0.000   22.246<br>0.00 100.00  88.65  76.00  97.17  94.66    674   22.246     0    0.000   22.246<br>0.00 100.00  88.83  76.00  97.17  94.66    674   22.246     0    0.000   22.246    </p>
 <p>S0:第一个survior使用百分比  S1:第二个survior使用百分比<br>E:Eden的使用百分比         O: 老年代使用百分比<br>M:方法区使用百分比          CCS:压缩类使用百分比？<br>YGC:年轻代垃圾回收次数      YGCT:年轻代垃圾回收消耗时间<br>FGC:老年代垃圾回收次数      FGCT:老年代垃圾回收消耗时间<br>GCT:垃圾回收消耗总时间    </p>
 <p>疑问：<br>1、Nagle算法<br>2、TCP首部中的窗口大小作用<br>网络传输过程中的流量控制。<br>3、拥塞控制算法<br>4、http2.0到底干了啥<br>5、RSA加密算法了解<br>6、swap交换分区作用<br>7、top5如何获得<br>8、jstat工具    </p>
-<p>6.3<br>一、JIT<br>1、什么情况下会触发JIT<br>方法调用计数器和循环回边计数器达到某阈值后，会进入编译队列，队列由一个或者多个后台线程来异步处理。<br>-XX:CICompilerCount=N设置JVM队列处理线程总数，c1和c2线程数量比为1:2。<br>2、方法内联<br>是JIT编译在运行时完成，当方法的调用次数达到一定阈值的方法调用替换为方法体本身<br>2.1、限制条件：<br>1）调用次数是否达标<br>2）被调用方的方法大小是否合适<br>3）被调用方运行时其实现是否可以唯一确定<br>2.2、针对虚方法的去虚化<br>1）完全去虚化：通过类型推导或者类层次分析。<br>2）条件去虚化：直接把class判断展开写死在代码里。<br>3、逃逸分析：判断新建的对象是否会被其他线程访问到<br>开启逃逸分析后，会采取更激进的优化措施。</p>
+<p>6.3<br>一、JIT<br>1、什么情况下会触发JIT<br>方法调用计数器和循环回边计数器达到某阈值后，会进入编译队列，队列由一个或者多个后台线程来异步处理。<br>-XX:CICompilerCount=N设置JVM队列处理线程总数，c1和c2线程数量比为1:2。<br>2、方法内联<br>是JIT编译在运行时完成，当方法的调用次数达到一定阈值的方法调用替换为方法体本身<br>2.1、限制条件：<br>1）调用次数是否达标<br>2）被调用方的方法大小是否合适<br>3）被调用方运行时其实现是否可以唯一确定<br>2.2、针对虚方法的去虚化<br>1）完全去虚化：通过类型推导或者类层次分析。<br>2）条件去虚化：直接把class判断展开写死在代码里。</p>
 <p>疑问：<br>1、什么时候C1编译，什么时候C2编译<br>2、看下Arrays.sort源码</p>
+<p>6.4<br>一、JIT<br>1、逃逸分析：判断新建的对象是否会被其他线程访问到。<br>开启逃逸分析后，会采取更激进的优化措施。<br>1.1、锁消除：一般不太会，除非代码写的有问题。<br>1.2、栈上分配：hotspot不支持栈上分配，其实栈上分配说白了就是将对象打散，用标量来替换对象内的值。<br>1.3、标量替换：原本对象字段的访问，变成一个个局部变量来访问。<br>二、GC<br>1、客观上分两步：一步是找出不用的内存，还有就是采用何种方式来清理不用的内存。<br>2、分代收集：young区: eden survior     old区<br>2.1分代的主要原因：<br>1、GC能有应付应用内存分配的速率，避免GC速度跟不上应用分配速率，导致应用分配内存时等候GC跟上来<br>2、减少stop the world的时间<br>3、调优基础<br>3.1、堆大小设置：设置的值不要超出物理内存，并预留一部分内存余量<br>-Xms:初始值 -Xmx:最大值，一般会设置Xms==Xmx，如何设置堆的大小：可以看下FullGC后，理论上可以释放出70%空间，30%仍占用<br>MaxNewSize:直接设置新生代大小，默认新生代:老年代 = 2 : 1<br>3.2、永久代（JDK7)、元空间(JDK8) 大小空间设置<br>3.3、并行垃圾收集的线程数量设置 ParallelGCThreads=N   </p>
+<p>疑问：<br>1、各中GC收集器的运行机制，调优。<br>2、ForkJoinPool 了解   </p>
 
       
     </div>
@@ -494,7 +496,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
