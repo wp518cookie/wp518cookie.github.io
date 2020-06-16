@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="麻屋">
 <meta property="og:description" content="6.9一、JVM各区域内存划分线程私有：1、程序计数器(Program Counter):  记录了线程当前正在执行的字节码，JNI的话则为undefined。  唯一一个无OutOfMemoryError情况的区域2、虚拟机栈：方法执行的内存模型，由一个个栈帧组成，方法调用就是入栈，完成调用即出栈。StackOverflowError: 栈内存不够了, -Xss可以设置栈的内存大小。OutOfM">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-06-11T10:51:50.031Z">
+<meta property="og:updated_time" content="2020-06-15T10:05:09.524Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="20-6-9-14">
 <meta name="twitter:description" content="6.9一、JVM各区域内存划分线程私有：1、程序计数器(Program Counter):  记录了线程当前正在执行的字节码，JNI的话则为undefined。  唯一一个无OutOfMemoryError情况的区域2、虚拟机栈：方法执行的内存模型，由一个个栈帧组成，方法调用就是入栈，完成调用即出栈。StackOverflowError: 栈内存不够了, -Xss可以设置栈的内存大小。OutOfM">
@@ -366,8 +366,9 @@
 <p>二、对象内存布局：对象头、实例数据、对齐填充<br>1、对象头：<br>1.1、运行时数据（64位）：hashcode,gc分代年龄<br>1.2、类型指针（64位，未开启压缩指针）：指向类元数据的指针，通过这个指针来确认这个类时哪个类的实例。<br>1.3、数组长度（32位）：（若是数组的话）<br>2、压缩指针机制：<br>2.1、对象填充：对象的起始地址必须对齐至8的倍数，方便寻址。<br>2.2、字段对齐：为了让字段只出现在同一CPU的缓存行中，若不对齐则可能出现跨缓存行的字段。<br>2.3、压缩指针就是8字节为单位保存指针，即每个对象起始地址肯定是8的倍数，故而可以用每位实际地址/8来压缩其指针表示，堆的大小在4G ～ 32G之间可以用。</p>
 <p>疑问：<br>1、TLAB<br><a href="https://www.cnblogs.com/hollischuang/p/12453988.html" target="_blank" rel="noopener">https://www.cnblogs.com/hollischuang/p/12453988.html</a></p>
 <p>6.11<br>一、堆OOM<br>1、先确认是内存溢出还是内存泄漏<br>内存溢出：没有足够的内存分配<br>内存泄漏：申请内存后，没有释放已申请的内存。内存泄漏如果是频繁发生的话，最终会导致内存溢出。</p>
-<p>二、GC相关<br>1、可达性分析：通过GC ROOT进行可达性分析，栈中引用对象，静态变量，常量引用对象<br>2、引用的分类：强引用、软引用、弱引用、虚引用</p>
-<p>疑问：<br>1、一致性hash的深入了解<br><a href="https://www.cnblogs.com/xrq730/p/5186728.html" target="_blank" rel="noopener">https://www.cnblogs.com/xrq730/p/5186728.html</a><br>2、内存泄漏理解，如何人工模拟内存泄漏<br><a href="https://club.perfma.com/article/266960" target="_blank" rel="noopener">https://club.perfma.com/article/266960</a><br>内存泄露：应用占用cpu高，运行一段时间，频繁fullGC，但不马上抛内存溢出；<br>死锁：应用占用cpu高，gc无明显异常，jstack 命令可以发现deadlock<br>OOM: 这个看日志就能看出来，线程过多unable to create Thread，堆溢出：java heap space<br>某线程占用cpu高： 通过top命令查找java线程占用cpu最高的， jstack命令分析线程栈信息<br>3、线上响应慢原因排查</p>
+<p>二、GC相关<br>1、可达性分析：通过GC ROOT进行可达性分析，栈中引用对象，静态变量，常量引用对象<br>2、引用的分类：强引用、软引用、弱引用、虚引用<br>2.1、弱引用(weakReference)使用场景：当某些场景下，thread如线程池是复用的，由于threadLocalMap是线程特有的，一直在，则说明一直有强引用在，会导致即使栈上的threadLocal已经被销毁了，但是entry仍由于线程的关系无法被回收。<br>但是弱引用后，仅仅threadLocal被回收了，value并不会被回收，等于Entry中只是key没了，value还在。所以每次get或者set时遇到null的key，都会清理下value。<br>清理的时候还会进行重哈希，为何？因为使用的是开放地址法处理哈希冲突，所以每次查找到null的entry就停了，但是你清除entry的话，会导致后续的的entry查找中断，所以需要重新hash定位。<br>2.2、软引用(softReference)使用场景：适合第一次GC后仍旧没有足够的内存后才会收集掉。</p>
+<p>三、hash冲突处理<br>1、拉链法：发生冲突时，类似hashmap的处理，适合节点比较多，可以通过较大负载因子带来的收益来抵消额外指针带来的空间浪费<br>2、开放地址法：类似threadlocal处理冲突的方式，比较怕冲突，因为一旦冲突厉害，元素较多，很有很多无意义的遍历。适合元素较小，负载因子设置较小的情况。<br>3、再哈希法：每级冲突都设置一个hash函数，但是增加cpu时间。</p>
+<p>疑问：<br>1、一致性hash的深入了解<br><a href="https://www.cnblogs.com/xrq730/p/5186728.html" target="_blank" rel="noopener">https://www.cnblogs.com/xrq730/p/5186728.html</a><br>2、内存泄漏理解，如何人工模拟内存泄漏<br><a href="https://club.perfma.com/article/266960" target="_blank" rel="noopener">https://club.perfma.com/article/266960</a><br>内存泄露：应用占用cpu高，运行一段时间，频繁fullGC，但不马上抛内存溢出；<br>死锁：应用占用cpu高，gc无明显异常，jstack 命令可以发现deadlock<br>OOM: 这个看日志就能看出来，线程过多unable to create Thread，堆溢出：java heap space<br>某线程占用cpu高： 通过top命令查找java线程占用cpu最高的， jstack命令分析线程栈信息<br>3、线上响应慢原因排查<br>4、sql 两边执行计划不一致原因查询<br>5、treemap ceiling floor实现</p>
 
       
     </div>
@@ -407,6 +408,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/15/20-6-15-21/" rel="prev" title="20-6-15-21">
+                20-6-15-21 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -474,7 +479,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
