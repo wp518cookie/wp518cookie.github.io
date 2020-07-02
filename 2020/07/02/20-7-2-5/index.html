@@ -79,13 +79,19 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="麻屋">
-<meta property="og:url" content="http://yoursite.com/tags/dubbo/index.html">
+<meta name="description" content="7.2Map系一、hashMap1、1.8之前会死锁，why?https://www.jianshu.com/p/1e9cf0ac07f4由于扩容时是头节点插入，会导致死锁的发生。如原槽位 A -&amp;gt; B -&amp;gt; C线程1、2同时触发扩容则线程1 先执行到 next = e.next,线程2完成了扩容由于是头节点插入，扩容后的引用关系如 newTab2[i] = C -&amp;gt; B -&amp;g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="20-7-2-5">
+<meta property="og:url" content="http://yoursite.com/2020/07/02/20-7-2-5/index.html">
 <meta property="og:site_name" content="麻屋">
+<meta property="og:description" content="7.2Map系一、hashMap1、1.8之前会死锁，why?https://www.jianshu.com/p/1e9cf0ac07f4由于扩容时是头节点插入，会导致死锁的发生。如原槽位 A -&amp;gt; B -&amp;gt; C线程1、2同时触发扩容则线程1 先执行到 next = e.next,线程2完成了扩容由于是头节点插入，扩容后的引用关系如 newTab2[i] = C -&amp;gt; B -&amp;g">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/07/02/20-7-2-5/image1.png">
+<meta property="og:updated_time" content="2020-07-02T10:18:28.271Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="麻屋">
+<meta name="twitter:title" content="20-7-2-5">
+<meta name="twitter:description" content="7.2Map系一、hashMap1、1.8之前会死锁，why?https://www.jianshu.com/p/1e9cf0ac07f4由于扩容时是头节点插入，会导致死锁的发生。如原槽位 A -&amp;gt; B -&amp;gt; C线程1、2同时触发扩容则线程1 先执行到 next = e.next,线程2完成了扩容由于是头节点插入，扩容后的引用关系如 newTab2[i] = C -&amp;gt; B -&amp;g">
+<meta name="twitter:image" content="http://yoursite.com/2020/07/02/20-7-2-5/image1.png">
 
 
 
@@ -115,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/dubbo/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/07/02/20-7-2-5/"/>
 
 
 
 
 
-  <title>标签: dubbo | 麻屋</title>
+  <title>20-7-2-5 | 麻屋</title>
   
 
 
@@ -140,7 +146,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -254,54 +260,150 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>dubbo<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/02/20-7-2-5/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ping wu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="麻屋">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/05/29/dubbo中的SPI机制/" itemprop="url">
-              
-                <span itemprop="name">dubbo中的SPI机制</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">20-7-2-5</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-05-29T17:31:19+08:00"
-              content="2019-05-29" >
-          05-29
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-02T11:10:48+08:00">
+                2020-07-02
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>7.2<br>Map系<br>一、hashMap<br>1、1.8之前会死锁，why?<br><a href="https://www.jianshu.com/p/1e9cf0ac07f4" target="_blank" rel="noopener">https://www.jianshu.com/p/1e9cf0ac07f4</a><br>由于扩容时是头节点插入，会导致死锁的发生。<br>如原槽位 A -&gt; B -&gt; C<br>线程1、2同时触发扩容<br>则线程1 先执行到 next = e.next,<br>线程2完成了扩容由于是头节点插入，扩容后的引用关系如 newTab2[i] = C -&gt; B -&gt; A<br>线程1继续进行扩容<br>1） newTab1[i] = A<br>2)  e = next(B) , next = e.next(A) 则 newTab1[i] = B，<br>3） 接着处理A， 则 A.next = newTab<a href="B">i</a>, newTab[i] = A， 则引用关系成了 B-&gt; A -&gt; B<br>则在get的时候，一旦获取该槽位的数据时，就会导致死循环，引起cpu 100%<br>2、1.7 1.8区别<br>1）1.7 是数组+链表  1.8 是数组+链表+红黑树<br>2）避免并发下的死锁，扩容时1.7用的头插法，1.8用的尾部插入</p>
+<p>二、TreeMap<br>1、有序的map，key必须实现Comparable或者构造treeMap时，传入Comparator，否则会报错<br>2、与hashMap红黑树的区别，hashMap以hash作为顺序，treeMap是以key的顺序/comparator作为顺序</p>
+<p>三、linkedHashMap<br>1、如何维持有序：entry额外维护了两个指针,before,after，来维护有序<br>2、LRU实现： 1、accessOrder设置为True 2、removeEldest实现，如设置个size 大于特定值返回true</p>
+<p>mysql<br>一、事务的实现<br>1、redo log：<br>1)目的：<br>保证数据的持久化，避免脏页因为系统崩溃后，未来得及写入磁盘而丢失。<br><a href="https://zhuanlan.zhihu.com/p/65811829" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/65811829</a><br><a href="https://www.jianshu.com/p/57c510f4ec28" target="_blank" rel="noopener">https://www.jianshu.com/p/57c510f4ec28</a><br>客户端进行数据操作时，都会经过buffer pool来处理，包括数据写入时也是，但是若每次写入都需要将数据刷到磁盘上，会触发N次随机IO。就需要redo log顺序写的机制记录每次数据页上发生的变化。<br>2)记录形式：<br>把第10表空间的第90号页面的偏移量为1024处的值更新为1<br>2、undo log：<br>1）目的：用户事务回滚及支持mvcc功能<br>2）事务回滚到前一版本的逻辑记录，记录的是逻辑语句。即insert，则undo是delete， update则是相反的update。<br>3、<br>1）为何要配套使用，若仅用redo log，则若事务涉及到很多记录，不敢刷脏页，因为事务失败无法回滚。<br>2）若仅有undo log， 则若脏页因系统宕机丢失了，则脏页上的数据无法恢复。</p>
+<p>二、锁<br>mysql中的两种锁:lock、latch<br><img src="/2020/07/02/20-7-2-5/image1.png" alt="锁的分类"><br>1、</p>
+<p>疑问：<br>1、hashMap put过程</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/22/20-6-22-28/" rel="next" title="20-6-22-28">
+                <i class="fa fa-chevron-left"></i> 20-6-22-28
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/02/20年7月待读/" rel="prev" title="20年7月待读">
+                20年7月待读 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -309,6 +411,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -523,6 +629,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

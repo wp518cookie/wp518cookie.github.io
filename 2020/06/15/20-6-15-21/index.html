@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="麻屋">
 <meta property="og:description" content="6.15一、GC之引用1、referenceQueue1.1、为了监控SoftReference/WeakReference/PhantomReference是否已被GC1.2、为了替代finalize,之前释放的时机是交给了jvm来实现，可能会有并发释放啊等情况，不可控且不安全，当finalize时再次关联到强引用则无法被回收。而referenceQueue可以在gc之后，将该reference">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-06-16T00:02:32.132Z">
+<meta property="og:updated_time" content="2020-06-21T05:10:06.946Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="20-6-15-21">
 <meta name="twitter:description" content="6.15一、GC之引用1、referenceQueue1.1、为了监控SoftReference/WeakReference/PhantomReference是否已被GC1.2、为了替代finalize,之前释放的时机是交给了jvm来实现，可能会有并发释放啊等情况，不可控且不安全，当finalize时再次关联到强引用则无法被回收。而referenceQueue可以在gc之后，将该reference">
@@ -365,10 +365,14 @@
         <p>6.15<br>一、GC之引用<br>1、referenceQueue<br>1.1、为了监控SoftReference/WeakReference/PhantomReference是否已被GC<br>1.2、为了替代finalize,之前释放的时机是交给了jvm来实现，可能会有并发释放啊等情况，不可控且不安全，当finalize时再次关联到强引用则无法被回收。而referenceQueue可以在gc之后，将该reference加入到queue中，可以通过remove在获取，再执行自定义的逻辑。<br>1.3、在GC发生之前放入queue中<br>2、虚引用 phantomReference使用场景：<br>比如记载一个很大的图片，当确认了图片已被GC后才允许继续加载图片，避免OOM。</p>
 <p>二、GC收集器<br>1、cms(Concurrent Mark Sweep)收集器<br>1.1、收集过程<br>1）初始标记<br>stop the world,标记GC ROOT直接关联到的对象<br>2）并发标记<br>根据GC ROOT直接关联到的对象来进行并发递归进行标记<br>3）重新标记<br>stop the world,修正并发期间因用户程序继续运行导致标记产生变动的部分<br>4）并发清除<br>1.2、优点：低停顿<br>1.3、缺点：跟用户抢占cpu、无法收集浮动垃圾、会有很多内存碎片</p>
 <p>2、G1收集器<br>2.1、收集过程<br>1）初始标记<br>2）并发标记<br>3）最终标记<br>4）筛选回收</p>
-<p>3、对象分配过程<br>3.1、先在Eden区中分配，当Eden区没有足够的空间进行分配时，jvm将发起一次GC<br>3.2、大对象直接进入老年代<br>3.3、年龄达到一定值则晋升至老年代<br>3.4、</p>
-<p>疑问：<br>1、深入理解cms、G1<br>2、虚拟机调优</p>
+<p>3、对象分配过程<br>3.1、先在Eden区中分配，当Eden区没有足够的空间进行分配时，jvm将发起一次GC<br>3.2、大对象直接进入老年代<br>3.3、年龄达到一定值则晋升至老年代<br>疑问：<br>1、深入理解cms、G1<br>2、虚拟机调优</p>
 <p>6.16<br>一、字节码：平台无关的中间码，为了支持java的跨平台支持，通过各种不同平台的jvm来将字节码翻译成平台相关的机器码。<br>二、类加载过程：<br>1、加载：将二进制流转成内存中class的数据结构<br>2、验证：字节码的规范检查、符号引用检查<br>3、准备：为static分配内存并设置变量类型的初始值<br>4、解析：符号引用转成直接引用（即静态绑定的过程）<br>5、初始化：clinit，给静态变量赋值<br>三、类加载器<br>双亲委派机制：向上查找，向下委托<br>递归操作：1、判断当前classLoader是否加载过 -&gt;没加载过，是否有parent加载器，有则递归上述行为，没有则交给boot加载器递归上述行为 -&gt; 尝试加载该类</p>
+<p>四、各代垃圾收集器整理<br>1、垃圾收集器一览<br>1.1、年轻代： Serial、PraNew、Parallel Scavenge、G1收集器<br>1.2、老年代： Serial Old、Parallel Old、CMS、G1收集器<br>2、安全点：说白了就是一段引用关系不会发生变化的点</p>
 <p>疑问：<br>1、锁升级过程</p>
+<p>6.18<br>一、redisson的watchdog机制<br>为了避免持有锁的节点执行时间超过锁的过期时间，redisson提供了看门狗机制，在默认过期时间/3的频率会刷新过期时间，默认是30s。当节点挂了无法继续更新节点过期时间则自然会失效。<br>二、redis如何实现可重入的？<br>通过hash结构，key-value-count<br>通过count计数来控制锁的可重入<br>三、获取不到锁如何处理<br>通过一个本地的信号量，初始许可为0，acquire ttl时间，当锁释放了，则+1许可数量。避免出现同时唤醒多个线程竞争锁（羊群效应）。<br>四、公平锁如何实现<br>通过redis中内置的队列来达到这个效果</p>
+<p>6.19<br>一、redLock<br>1、是为了避免发生单redis节点在failover时会发生解决不了的安全问题，redLock由N个完全独立的redis节点（通常5个）。<br>2、加锁步骤<br>2.1、获取当前时间<br>2.2、按顺序依次获取锁，获取锁的时候设置一个小的timeout时间，获取失败时继续获取别的节点<br>2.3、计算整个获取过程耗时，若&lt;锁的有效时间且获取数量 &gt;= N/2+1,则认为成功获取到了锁。<br>2.4、刷新锁的有效时间<br>3、存在的问题：<br>3.1、节点宕机导致的问题<br>1）客户端1锁住了A、B、C节点，D、E未获取成功<br>2）节点C崩溃，并未将C持久化下来，丢失了<br>3）节点B锁住了C、D、E，获取锁成功<br>故而需要设置延迟重启，重启间隔大于锁的有效时间。<br>3.2、客户端本身hang住导致的问题<br>1）客户端因为GC/网络原因，拿到第一个锁后hang住，直至锁过期了，才后续进行获取，计算出来的size满足锁的条件，导致可能同时两个客户端获取到锁。<br>即客户端1获取到 A、B、C，由于A获取到后停顿了一段时间导致A实际过期了，客户端获取到了A、D、E<br>加个单调递增的序号，数据库层面控制，当发现更低序号的请求时拒绝<br>3.3、对时钟一致性依赖程度较高<br>客户端1锁住节点A、B、C，时钟往前跳跃导致的节点C的锁快速过期，客户端2获取到了C、D、E</p>
+<p>二、zk distributed lock<br>1、所有锁都放在一个节点下还是以锁为目录，在里头再具体排序，锁目录是怎么维护的？<br>可以新建一个以锁名命名的永久节点，里头加个前缀<br>2、获取逻辑：<br>2.1、先初始化锁目录，若没有新建永久节点<br>2.2、创建临时有序节点，判断该节点是否是children下第一个节点，是则获取锁<br>2.3、不是第一个节点则监听上一个节点，若监听到上一个节点被删除了说明锁获取成功，避免羊群效应<br>3、存在问题：<br>zk假心跳，网络不通等原因session过期，而实际仍在执行。另一个客户端也获取到了锁，则可能造成同时有两个锁</p>
+<p>疑问：<br>1、zookeeper的watch机制，时间节点控制<br>提前watch好再判断exist即可</p>
 
       
     </div>
@@ -408,6 +412,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/22/20-6-22-28/" rel="prev" title="20-6-22-28">
+                20-6-22-28 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -475,7 +483,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
