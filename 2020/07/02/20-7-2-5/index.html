@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="每日总结," />
 
 
 
@@ -80,6 +80,7 @@
 
 
 <meta name="description" content="7.2Map系一、hashMap1、1.8之前会死锁，why?https://www.jianshu.com/p/1e9cf0ac07f4由于扩容时是头节点插入，会导致死锁的发生。如原槽位 A -&amp;gt; B -&amp;gt; C线程1、2同时触发扩容则线程1 先执行到 next = e.next,线程2完成了扩容由于是头节点插入，扩容后的引用关系如 newTab2[i] = C -&amp;gt; B -&amp;g">
+<meta name="keywords" content="每日总结">
 <meta property="og:type" content="article">
 <meta property="og:title" content="20-7-2-5">
 <meta property="og:url" content="http://yoursite.com/2020/07/02/20-7-2-5/index.html">
@@ -87,7 +88,7 @@
 <meta property="og:description" content="7.2Map系一、hashMap1、1.8之前会死锁，why?https://www.jianshu.com/p/1e9cf0ac07f4由于扩容时是头节点插入，会导致死锁的发生。如原槽位 A -&amp;gt; B -&amp;gt; C线程1、2同时触发扩容则线程1 先执行到 next = e.next,线程2完成了扩容由于是头节点插入，扩容后的引用关系如 newTab2[i] = C -&amp;gt; B -&amp;g">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2020/07/02/20-7-2-5/image1.png">
-<meta property="og:updated_time" content="2020-07-02T10:18:28.271Z">
+<meta property="og:updated_time" content="2020-07-13T10:25:34.469Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="20-7-2-5">
 <meta name="twitter:description" content="7.2Map系一、hashMap1、1.8之前会死锁，why?https://www.jianshu.com/p/1e9cf0ac07f4由于扩容时是头节点插入，会导致死锁的发生。如原槽位 A -&amp;gt; B -&amp;gt; C线程1、2同时触发扩容则线程1 先执行到 next = e.next,线程2完成了扩容由于是头节点插入，扩容后的引用关系如 newTab2[i] = C -&amp;gt; B -&amp;g">
@@ -314,6 +315,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/每日总结/" itemprop="url" rel="index">
+                    <span itemprop="name">每日总结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -345,7 +368,9 @@
 <p>二、TreeMap<br>1、有序的map，key必须实现Comparable或者构造treeMap时，传入Comparator，否则会报错<br>2、与hashMap红黑树的区别，hashMap以hash作为顺序，treeMap是以key的顺序/comparator作为顺序</p>
 <p>三、linkedHashMap<br>1、如何维持有序：entry额外维护了两个指针,before,after，来维护有序<br>2、LRU实现： 1、accessOrder设置为True 2、removeEldest实现，如设置个size 大于特定值返回true</p>
 <p>mysql<br>一、事务的实现<br>1、redo log：<br>1)目的：<br>保证数据的持久化，避免脏页因为系统崩溃后，未来得及写入磁盘而丢失。<br><a href="https://zhuanlan.zhihu.com/p/65811829" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/65811829</a><br><a href="https://www.jianshu.com/p/57c510f4ec28" target="_blank" rel="noopener">https://www.jianshu.com/p/57c510f4ec28</a><br>客户端进行数据操作时，都会经过buffer pool来处理，包括数据写入时也是，但是若每次写入都需要将数据刷到磁盘上，会触发N次随机IO。就需要redo log顺序写的机制记录每次数据页上发生的变化。<br>2)记录形式：<br>把第10表空间的第90号页面的偏移量为1024处的值更新为1<br>2、undo log：<br>1）目的：用户事务回滚及支持mvcc功能<br>2）事务回滚到前一版本的逻辑记录，记录的是逻辑语句。即insert，则undo是delete， update则是相反的update。<br>3、<br>1）为何要配套使用，若仅用redo log，则若事务涉及到很多记录，不敢刷脏页，因为事务失败无法回滚。<br>2）若仅有undo log， 则若脏页因系统宕机丢失了，则脏页上的数据无法恢复。</p>
-<p>二、锁<br>mysql中的两种锁:lock、latch<br><img src="/2020/07/02/20-7-2-5/image1.png" alt="锁的分类"><br>1、</p>
+<p>二、锁<br>mysql中的两种锁:lock、latch<br><img src="/2020/07/02/20-7-2-5/image1.png" alt="锁的分类"><br>1、innodb两种标注行级锁：S Lock、X Lock<br>共享锁：允许事务读一行数据<br>排他锁：允许事务删除或更新一行数据</p>
+<p>2、意向锁：<br>如果另一个任务试图在该表级别上应用共享或排它锁，则受到由第一个任务控制的表级别意向锁的阻塞。第二个任务在锁定该表前不必检查各个页或行锁，而只需检查表上的意向锁。</p>
+<p>3、一致性读：利用多版本的某个时间点数据快照，达到不加锁处理select的效果<br>Repeatable read: 同一事务中读取的是该事务下第一次查询所建立的快照<br>Read Committed : 同一事务下的一致性读都会建立和读取此查询自己的最新快照</p>
 <p>疑问：<br>1、hashMap put过程</p>
 
       
@@ -361,6 +386,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/每日总结/" rel="tag"># 每日总结</a>
+          
+        </div>
       
 
       
@@ -451,7 +482,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

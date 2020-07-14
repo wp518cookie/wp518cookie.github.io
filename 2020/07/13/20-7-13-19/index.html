@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="6.28一、共识算法（consensus algorithm）1、cap中的一致性任何一个读取返回新值后，所有后续读取（在相同或其他客户端上）也必须返回新值，类似volatile语义。 二、raft各部分1、leader选举2、日志复制3、">
+<meta name="description" content="7.13mysql锁https://www.jianshu.com/p/13f5777966dd一、行级锁：分三类：记录锁、间隙锁、临键锁加锁的场景：共享锁select … lock in share mode排他锁select … for updateupdate、delete、insert 1、记录锁对某行进行加锁，如insert时，记录还不存在怎么办？会创建一个隐藏的聚簇索引，然后将其记录为">
 <meta name="keywords" content="每日总结">
 <meta property="og:type" content="article">
-<meta property="og:title" content="20-6-22-28">
-<meta property="og:url" content="http://yoursite.com/2020/06/22/20-6-22-28/index.html">
+<meta property="og:title" content="20-7-13-19">
+<meta property="og:url" content="http://yoursite.com/2020/07/13/20-7-13-19/index.html">
 <meta property="og:site_name" content="麻屋">
-<meta property="og:description" content="6.28一、共识算法（consensus algorithm）1、cap中的一致性任何一个读取返回新值后，所有后续读取（在相同或其他客户端上）也必须返回新值，类似volatile语义。 二、raft各部分1、leader选举2、日志复制3、">
+<meta property="og:description" content="7.13mysql锁https://www.jianshu.com/p/13f5777966dd一、行级锁：分三类：记录锁、间隙锁、临键锁加锁的场景：共享锁select … lock in share mode排他锁select … for updateupdate、delete、insert 1、记录锁对某行进行加锁，如insert时，记录还不存在怎么办？会创建一个隐藏的聚簇索引，然后将其记录为">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-06-28T11:00:30.643Z">
+<meta property="og:updated_time" content="2020-07-14T03:26:10.924Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="20-6-22-28">
-<meta name="twitter:description" content="6.28一、共识算法（consensus algorithm）1、cap中的一致性任何一个读取返回新值后，所有后续读取（在相同或其他客户端上）也必须返回新值，类似volatile语义。 二、raft各部分1、leader选举2、日志复制3、">
+<meta name="twitter:title" content="20-7-13-19">
+<meta name="twitter:description" content="7.13mysql锁https://www.jianshu.com/p/13f5777966dd一、行级锁：分三类：记录锁、间隙锁、临键锁加锁的场景：共享锁select … lock in share mode排他锁select … for updateupdate、delete、insert 1、记录锁对某行进行加锁，如insert时，记录还不存在怎么办？会创建一个隐藏的聚簇索引，然后将其记录为">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/06/22/20-6-22-28/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/07/13/20-7-13-19/"/>
 
 
 
 
 
-  <title>20-6-22-28 | 麻屋</title>
+  <title>20-7-13-19 | 麻屋</title>
   
 
 
@@ -273,7 +273,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/22/20-6-22-28/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/13/20-7-13-19/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ping wu">
@@ -290,7 +290,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">20-6-22-28</h1>
+          <h1 class="post-title" itemprop="name headline">20-7-13-19</h1>
         
 
         <div class="post-meta">
@@ -302,8 +302,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-22T11:04:01+08:00">
-                2020-06-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-13T17:50:00+08:00">
+                2020-07-13
               </time>
             
 
@@ -362,8 +362,13 @@
       
 
       
-        <p>6.28<br>一、共识算法（consensus algorithm）<br>1、cap中的一致性<br>任何一个读取返回新值后，所有后续读取（在相同或其他客户端上）也必须返回新值，类似volatile语义。</p>
-<p>二、raft各部分<br>1、leader选举<br>2、日志复制<br>3、</p>
+        <p>7.13<br>mysql锁<br><a href="https://www.jianshu.com/p/13f5777966dd" target="_blank" rel="noopener">https://www.jianshu.com/p/13f5777966dd</a><br>一、行级锁：<br>分三类：记录锁、间隙锁、临键锁<br>加锁的场景：<br>共享锁<br>select … lock in share mode<br>排他锁<br>select … for update<br>update、delete、insert</p>
+<p>1、记录锁<br>对某行进行加锁，如insert时，记录还不存在怎么办？会创建一个隐藏的聚簇索引，然后将其记录为锁定状态。<br>2、间隙锁<br>锁定一个范围，都是开区间<br>3、临键锁(next-key lock) 记录锁+间隙锁的组合</p>
+<p>二、快照读&amp;当前读</p>
+<p>三、何为幻读<br>1、同一个事务，连续两次当前读，那么这两次当前读返回的是相同的记录（记录数量一致，记录本身也一致），第二次不会返回更多的记录（幻象）<br>2、如何解决幻读：间隙锁<br>因为光锁定记录无法确保不会有幻读情况的产生，根据B+树的性质，需要将匹配的记录之前最近的一条记录，匹配的记录之间，匹配的记录之后的最近一条记录，加三个间隙锁。避免了两次当前读会有幻读现象产生。</p>
+<p>四、加锁的场景<br>1、如果是RC隔离级别，正常状态下主键索引会加锁，如果二级索引的话，则二级索引会加锁，同时该索引对应的主键索引加锁，不满足条件的主键索引锁会被释放，即有两个锁。<br>2、如果是RR隔离级别，会针对记录加间隙锁，</p>
+<p>疑问：<br>1、innodb_locks_unsafe_for_binlog作用<br>2、ICP(Index Condition Pushdown)机制了解</p>
+<p>7.14</p>
 
       
     </div>
@@ -394,8 +399,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/06/15/20-6-15-21/" rel="next" title="20-6-15-21">
-                <i class="fa fa-chevron-left"></i> 20-6-15-21
+              <a href="/2020/07/06/20-7-6-12/" rel="next" title="20-7-6-12">
+                <i class="fa fa-chevron-left"></i> 20-7-6-12
               </a>
             
           </div>
@@ -403,10 +408,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/07/02/20-7-2-5/" rel="prev" title="20-7-2-5">
-                20-7-2-5 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
