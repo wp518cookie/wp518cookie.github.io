@@ -269,6 +269,149 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/23/20-7-20-26/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ping wu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="麻屋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/07/23/20-7-20-26/" itemprop="url">20-7-20-26</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-23T14:04:59+08:00">
+                2020-07-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/每日总结/" itemprop="url" rel="index">
+                    <span itemprop="name">每日总结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>7.23</p>
+<p>疑问：<br>1、官方解法2<br><a href="https://leetcode-cn.com/explore/featured/card/bytedance/244/linked-list-and-tree/1040/" target="_blank" rel="noopener">https://leetcode-cn.com/explore/featured/card/bytedance/244/linked-list-and-tree/1040/</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/13/20-7-13-19/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -365,10 +508,15 @@
             <p>7.13<br>mysql锁<br><a href="https://www.jianshu.com/p/13f5777966dd" target="_blank" rel="noopener">https://www.jianshu.com/p/13f5777966dd</a><br>一、行级锁：<br>分三类：记录锁、间隙锁、临键锁<br>加锁的场景：<br>共享锁<br>select … lock in share mode<br>排他锁<br>select … for update<br>update、delete、insert</p>
 <p>1、记录锁<br>对某行进行加锁，如insert时，记录还不存在怎么办？会创建一个隐藏的聚簇索引，然后将其记录为锁定状态。<br>2、间隙锁<br>锁定一个范围，都是开区间<br>3、临键锁(next-key lock) 记录锁+间隙锁的组合</p>
 <p>二、快照读&amp;当前读</p>
-<p>三、何为幻读<br>1、同一个事务，连续两次当前读，那么这两次当前读返回的是相同的记录（记录数量一致，记录本身也一致），第二次不会返回更多的记录（幻象）<br>2、如何解决幻读：间隙锁<br>因为光锁定记录无法确保不会有幻读情况的产生，根据B+树的性质，需要将匹配的记录之前最近的一条记录，匹配的记录之间，匹配的记录之后的最近一条记录，加三个间隙锁。避免了两次当前读会有幻读现象产生。</p>
+<p>三、何为幻读<br>1、同一个事务，连续两次当前读，那么这两次当前读返回的是相同的记录（记录数量一致，记录本身也一致），第二次不会返回更多的记录（幻象）<br>2、如何解决幻读：间隙锁<br>因为光锁定记录无法确保不会有幻读情况的产生，根据B+树的性质，需要将匹配的记录之前最近的一条记录，匹配的记录之间，匹配的记录之后的最近一条记录，加三个间隙锁。避免了两次当前读会有幻读现象产生。<br>3、mysql RR级别下是否解决了幻读？<br>我认为解决了，在快照读的情况下，mysql通过MVCC来避免幻读。在当前读的情况下，mysql通过next-key lock来避免幻读。</p>
 <p>四、加锁的场景<br>1、如果是RC隔离级别，正常状态下主键索引会加锁，如果二级索引的话，则二级索引会加锁，同时该索引对应的主键索引加锁，不满足条件的主键索引锁会被释放，即有两个锁。<br>2、如果是RR隔离级别，会针对记录加间隙锁，</p>
-<p>疑问：<br>1、innodb_locks_unsafe_for_binlog作用<br>2、ICP(Index Condition Pushdown)机制了解</p>
-<p>7.14</p>
+<p>疑问：<br>1、innodb_locks_unsafe_for_binlog作用<br>2、ICP(Index Condition Pushdown)机制了解<br>3、间隙锁到底怎么锁的，到底是不是前开后闭？</p>
+<p>7.14<br>一、mvcc机制<br>数据的新增和删除是会维护一份版本号，记录了记录新增/修改时的版本号，删除的版本号，通过undolog可以找到数据之前的版本记录，RC隔离级别下，每次select都会发起一次快照读。而RR隔离级别下，只会记录第一次的快照读结果。</p>
+<p>二、spring事务传播行为：<br>1、required 默认的传播行为，如果存在事务，则支持当前事务。若没有则开启一个新事务。<br>2、supports 如果存在一个事务，支持当前事务，如果没有事务，则以非事务状态执行<br>3、mandatory 强制的，有事务加入，当前没有事务，抛异常<br>4、require_new 总是开启新事务，当前有事务则挂起存在的事务<br>5、not_supported 以非事务执行，挂起存在事务<br>6、never 以非事务执行，若存在事务，抛出异常<br>7、nest 嵌套，若有事务则以嵌套事务执行，若没有类似required。</p>
+<p>三、分库分表方案<br>why选择了分库？可扩展性更好，同时对单机性能要求也更低，因为多个库可以分布在多台机器上，分表则局限性较高。<br>分两类：<br>以jar包形式引入到项目中，如sharding-jdbc<br>以proxy层形式提供服务，如mycat</p>
+<p>疑问：<br>1、深入理解何博士关于MVCC的内容。<br>2、死锁排查及检测实例了解，何登成的文章。<br>3、semi-consistent了解</p>
+<p>7.17<br>一、seata事务模型<br>分为三个模块来处理全局事务和分支事务的关系及处理过程<br>1、Transaction Coordinator(TC): 事务协调器，维护全局事务的运行状态，负责协调事务的运行状态，驱动全局事务的提交或者回滚。<br>如示例代码中的seata-server部分。<br>2、Transaction Manager(TM): 事务管理器，控制全局事务的边界，负责开启一个事务，负责全局事务的提交或回滚的决议。<br>3、Resource Manager(RM): 控制分支事务，负责分支注册、状态汇报，接受事务协调器的指令，驱动分支事务的提交和回滚。</p>
+<p>疑问：<br>1、mysql的XA事务<br>引入一个TM，负责子事务的管理。进行两阶段式的提交： prepare阶段、commit/rollback阶段</p>
 
           
         
@@ -633,7 +781,9 @@
       
         
           
-            <p>mysql锁分析：<br><a href="https://www.jianshu.com/p/13f5777966dd" target="_blank" rel="noopener">https://www.jianshu.com/p/13f5777966dd</a><br>死锁分析<br><a href="https://developer.aliyun.com/article/269774" target="_blank" rel="noopener">https://developer.aliyun.com/article/269774</a><br>间隙锁<br><a href="http://guitoo.cc/wordpress/2019/05/07/mysql%E6%98%AF%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E9%97%B4%E9%9A%99%E9%94%81%E7%9A%84%E5%8A%A0%E9%94%81%E8%A7%84%E5%88%99/" target="_blank" rel="noopener">http://guitoo.cc/wordpress/2019/05/07/mysql%E6%98%AF%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E9%97%B4%E9%9A%99%E9%94%81%E7%9A%84%E5%8A%A0%E9%94%81%E8%A7%84%E5%88%99/</a></p>
+            <p>mysql锁分析：<br><a href="https://www.jianshu.com/p/13f5777966dd" target="_blank" rel="noopener">https://www.jianshu.com/p/13f5777966dd</a><br>死锁分析<br><a href="https://developer.aliyun.com/article/269774" target="_blank" rel="noopener">https://developer.aliyun.com/article/269774</a><br><a href="https://juejin.im/post/5dac651451882529d1528e12" target="_blank" rel="noopener">https://juejin.im/post/5dac651451882529d1528e12</a><br>间隙锁<br><a href="http://guitoo.cc/wordpress/2019/05/07/mysql%E6%98%AF%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E9%97%B4%E9%9A%99%E9%94%81%E7%9A%84%E5%8A%A0%E9%94%81%E8%A7%84%E5%88%99/" target="_blank" rel="noopener">http://guitoo.cc/wordpress/2019/05/07/mysql%E6%98%AF%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E9%97%B4%E9%9A%99%E9%94%81%E7%9A%84%E5%8A%A0%E9%94%81%E8%A7%84%E5%88%99/</a></p>
+<p>CQRS<br><a href="https://www.martinfowler.com/bliki/CQRS.html" target="_blank" rel="noopener">https://www.martinfowler.com/bliki/CQRS.html</a></p>
+<p>seata源码分析：<br>分布式事务实现原理：<a href="https://my.oschina.net/keking/blog/3011509" target="_blank" rel="noopener">https://my.oschina.net/keking/blog/3011509</a><br>RM模块源码： <a href="https://mp.weixin.qq.com/s/EzmZ-DAi-hxJhRkFvFhlJQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/EzmZ-DAi-hxJhRkFvFhlJQ</a><br>Fescar全局锁的理解： <a href="http://www.iocoder.cn/Seata/ZZ/Understanding-of-Fescar-lock-design-and-isolation-levels/" target="_blank" rel="noopener">http://www.iocoder.cn/Seata/ZZ/Understanding-of-Fescar-lock-design-and-isolation-levels/</a></p>
 
           
         
@@ -1536,153 +1686,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/26/20-5-24-31/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ping wu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="麻屋">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/05/26/20-5-24-31/" itemprop="url">20-5-24-31</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-26T14:25:11+08:00">
-                2020-05-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/每日总结/" itemprop="url" rel="index">
-                    <span itemprop="name">每日总结</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>5.26<br>一、Jraft了解<br>1、应用场景：leader选举、分布式锁、高可靠元信息管理、分布式存储。<br>2、结构：<br><img src="/2020/05/26/20-5-24-31/20_05_26_01.png" alt="jraft结构"><br>2.1、StateMachine: 状态机，根据命令（log)来计算具体状态及中的值<br>2.2、Log Manager: 日志管理器，存储发来的命令日志<br>2.3、Snapshot Executor: 快照执行器<br>作用：新Node加入集群时，不需要全量日志复制，仅需复制快照<br>2.4、Replicator: 命令复制器，有几个follower就有几个,支持并行复制，当半数复制成功即可到状态及中执行<br>3、流程：<br>client向Node发送类似“存100元”命令，Log存储模块先将命令以Log形式存储到本地。同时Replicator把日志复制到其他Node。半数以上返回复制成功后，即可将该Log及之前的Log有序发送到状态机中执行。状态机的执行由具体使用场景来确定执行逻辑。</p>
-<p>二、选举主线任务：<br>1、candidate被ET触发<br>2、candidate发起pre-vote，为了避免candidate自己的原因而没收到leader的命令，导致不停的触发Term的递增<br>3、follower判断是否认可该pre-vote request<br>4、candidate根据pre-vote response来决定是否发起requestVoteRequest<br>5、follower判断是否认可该requestVoteRequest<br>6、Candidate根据response来判断自己是否当选<br></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/05/26/20-5-24-31/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1733,7 +1736,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

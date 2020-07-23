@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="麻屋">
 <meta property="og:description" content="7.13mysql锁https://www.jianshu.com/p/13f5777966dd一、行级锁：分三类：记录锁、间隙锁、临键锁加锁的场景：共享锁select … lock in share mode排他锁select … for updateupdate、delete、insert 1、记录锁对某行进行加锁，如insert时，记录还不存在怎么办？会创建一个隐藏的聚簇索引，然后将其记录为">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-07-14T03:26:10.924Z">
+<meta property="og:updated_time" content="2020-07-20T01:41:31.017Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="20-7-13-19">
 <meta name="twitter:description" content="7.13mysql锁https://www.jianshu.com/p/13f5777966dd一、行级锁：分三类：记录锁、间隙锁、临键锁加锁的场景：共享锁select … lock in share mode排他锁select … for updateupdate、delete、insert 1、记录锁对某行进行加锁，如insert时，记录还不存在怎么办？会创建一个隐藏的聚簇索引，然后将其记录为">
@@ -365,10 +365,15 @@
         <p>7.13<br>mysql锁<br><a href="https://www.jianshu.com/p/13f5777966dd" target="_blank" rel="noopener">https://www.jianshu.com/p/13f5777966dd</a><br>一、行级锁：<br>分三类：记录锁、间隙锁、临键锁<br>加锁的场景：<br>共享锁<br>select … lock in share mode<br>排他锁<br>select … for update<br>update、delete、insert</p>
 <p>1、记录锁<br>对某行进行加锁，如insert时，记录还不存在怎么办？会创建一个隐藏的聚簇索引，然后将其记录为锁定状态。<br>2、间隙锁<br>锁定一个范围，都是开区间<br>3、临键锁(next-key lock) 记录锁+间隙锁的组合</p>
 <p>二、快照读&amp;当前读</p>
-<p>三、何为幻读<br>1、同一个事务，连续两次当前读，那么这两次当前读返回的是相同的记录（记录数量一致，记录本身也一致），第二次不会返回更多的记录（幻象）<br>2、如何解决幻读：间隙锁<br>因为光锁定记录无法确保不会有幻读情况的产生，根据B+树的性质，需要将匹配的记录之前最近的一条记录，匹配的记录之间，匹配的记录之后的最近一条记录，加三个间隙锁。避免了两次当前读会有幻读现象产生。</p>
+<p>三、何为幻读<br>1、同一个事务，连续两次当前读，那么这两次当前读返回的是相同的记录（记录数量一致，记录本身也一致），第二次不会返回更多的记录（幻象）<br>2、如何解决幻读：间隙锁<br>因为光锁定记录无法确保不会有幻读情况的产生，根据B+树的性质，需要将匹配的记录之前最近的一条记录，匹配的记录之间，匹配的记录之后的最近一条记录，加三个间隙锁。避免了两次当前读会有幻读现象产生。<br>3、mysql RR级别下是否解决了幻读？<br>我认为解决了，在快照读的情况下，mysql通过MVCC来避免幻读。在当前读的情况下，mysql通过next-key lock来避免幻读。</p>
 <p>四、加锁的场景<br>1、如果是RC隔离级别，正常状态下主键索引会加锁，如果二级索引的话，则二级索引会加锁，同时该索引对应的主键索引加锁，不满足条件的主键索引锁会被释放，即有两个锁。<br>2、如果是RR隔离级别，会针对记录加间隙锁，</p>
-<p>疑问：<br>1、innodb_locks_unsafe_for_binlog作用<br>2、ICP(Index Condition Pushdown)机制了解</p>
-<p>7.14</p>
+<p>疑问：<br>1、innodb_locks_unsafe_for_binlog作用<br>2、ICP(Index Condition Pushdown)机制了解<br>3、间隙锁到底怎么锁的，到底是不是前开后闭？</p>
+<p>7.14<br>一、mvcc机制<br>数据的新增和删除是会维护一份版本号，记录了记录新增/修改时的版本号，删除的版本号，通过undolog可以找到数据之前的版本记录，RC隔离级别下，每次select都会发起一次快照读。而RR隔离级别下，只会记录第一次的快照读结果。</p>
+<p>二、spring事务传播行为：<br>1、required 默认的传播行为，如果存在事务，则支持当前事务。若没有则开启一个新事务。<br>2、supports 如果存在一个事务，支持当前事务，如果没有事务，则以非事务状态执行<br>3、mandatory 强制的，有事务加入，当前没有事务，抛异常<br>4、require_new 总是开启新事务，当前有事务则挂起存在的事务<br>5、not_supported 以非事务执行，挂起存在事务<br>6、never 以非事务执行，若存在事务，抛出异常<br>7、nest 嵌套，若有事务则以嵌套事务执行，若没有类似required。</p>
+<p>三、分库分表方案<br>why选择了分库？可扩展性更好，同时对单机性能要求也更低，因为多个库可以分布在多台机器上，分表则局限性较高。<br>分两类：<br>以jar包形式引入到项目中，如sharding-jdbc<br>以proxy层形式提供服务，如mycat</p>
+<p>疑问：<br>1、深入理解何博士关于MVCC的内容。<br>2、死锁排查及检测实例了解，何登成的文章。<br>3、semi-consistent了解</p>
+<p>7.17<br>一、seata事务模型<br>分为三个模块来处理全局事务和分支事务的关系及处理过程<br>1、Transaction Coordinator(TC): 事务协调器，维护全局事务的运行状态，负责协调事务的运行状态，驱动全局事务的提交或者回滚。<br>如示例代码中的seata-server部分。<br>2、Transaction Manager(TM): 事务管理器，控制全局事务的边界，负责开启一个事务，负责全局事务的提交或回滚的决议。<br>3、Resource Manager(RM): 控制分支事务，负责分支注册、状态汇报，接受事务协调器的指令，驱动分支事务的提交和回滚。</p>
+<p>疑问：<br>1、mysql的XA事务<br>引入一个TM，负责子事务的管理。进行两阶段式的提交： prepare阶段、commit/rollback阶段</p>
 
       
     </div>
@@ -408,6 +413,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/23/20-7-20-26/" rel="prev" title="20-7-20-26">
+                20-7-20-26 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -475,7 +484,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
